@@ -9,6 +9,7 @@ struct NO {
 };
 
 NO* raiz = NULL;
+NO* elementoBuscar;
 
 // headers
 // estrutura principal
@@ -16,8 +17,10 @@ void menu();
 void inicializar();
 void inserir();
 void exibir();
+void esquerda();
+void direita();
 void exibirQuantidade();
-
+void buscarElemento();
 
 
 // funcoes auxiliares Arvore
@@ -25,6 +28,10 @@ NO* insereArvore(NO* no, int valor);
 NO* criaNO(int valor);
 int elementosArvore(NO* no);
 void exibirElementosArvore(NO* no);
+void exibirEsquerda(NO* no);
+void exibirDireita(NO* no);
+bool buscar(NO* no, int valor);
+
 //--------------------------
 
 
@@ -36,7 +43,7 @@ int main()
 void menu()
 {
 	int op = 0;
-	while (op != 5) {
+	while (op != 8) {
 		system("cls"); // somente no windows
 		cout << "Menu Arvore";
 		cout << endl << endl;
@@ -44,8 +51,11 @@ void menu()
 		cout << "2 - Exibir quantidade de elementos \n";
 		cout << "3 - Inserir elemento \n";
 		cout << "4 - Exibir elementos \n";
+		cout << "5 - Exibir Esquerda \n";
+		cout << "6 - Exibir Direita \n";
+		cout << "7 - buscar Elemento \n";
 
-		cout << "5 - Sair \n";
+		cout << "8 - Sair \n";
 
 		cout << "Opcao: ";
 		cin >> op;
@@ -60,6 +70,12 @@ void menu()
 			break;
 		case 4: exibir();
 			break;
+		case 5: esquerda();
+			break;
+		case 6: direita();
+			break;
+		case 7: buscarElemento();
+			break;
 		default:
 			break;
 		}
@@ -71,9 +87,8 @@ void menu()
 void inicializar()
 {
 
-	// provisÛrio porque n„o libera a memoria usada pela arvore
+	// provis√≥rio porque n√£o libera a memoria usada pela arvore
 	NO* raiz = NULL;
-	
 	cout << "Arvore inicializada \n";
 
 }
@@ -88,7 +103,7 @@ void inserir()
 		raiz = criaNO(valor);
 	}
 	else {
-		 insereArvore(raiz, valor);
+		insereArvore(raiz, valor);
 	}
 
 
@@ -96,11 +111,46 @@ void inserir()
 
 void exibirQuantidade() {
 	cout << "Quantidade de elementos: " << elementosArvore(raiz) << endl;
-	
 }
 
 void exibir() {
-	exibirElementosArvore(raiz);
+	if (raiz == NULL) {
+		cout << "Arvore Vazia." << endl;
+	}
+	else {
+		exibirElementosArvore(raiz);
+	}
+}
+
+void esquerda() {
+	if (raiz == NULL) {
+		cout << "Arvore Vazia." << endl;
+	}
+	else {
+		exibirEsquerda(raiz);
+	}
+}
+
+void direita() {
+	if (raiz == NULL) {
+		cout << "Arvore Vazia." << endl;
+	}
+	else {
+		exibirDireita(raiz);
+	}
+}
+
+void buscarElemento() 
+{
+	int valor;
+	cout << "Insira o valor a ser encontrado: ";
+	cin >> valor;
+	if (buscar(raiz, valor)) {
+		cout << "Elemento encontrado\n";
+	}
+	else {
+		cout << "Elemento nao encontrado\n";
+	}
 }
 
 
@@ -138,7 +188,6 @@ NO* insereArvore(NO* no, int valor)
 	else {
 		return NULL;
 	}
-	
 }
 
 int elementosArvore(NO* no)
@@ -152,5 +201,37 @@ int elementosArvore(NO* no)
 
 void exibirElementosArvore(NO* no)
 {
-	
+	if (no != NULL) {
+		cout << no->valor << " ";
+		exibirElementosArvore(no->esq);
+		exibirElementosArvore(no->dir);
+	}
+}
+
+void exibirEsquerda(NO* no)
+{
+	if (no != NULL) {
+		cout << no->valor << " ";
+		exibirEsquerda(no->esq);
+	}
+}
+
+void exibirDireita(NO* no)
+{
+	if (no != NULL) {
+		cout << no->valor << " ";
+		exibirDireita(no->dir);
+	}
+}
+
+
+bool buscar(NO* no, int valor) 
+{
+	if (no == NULL) {
+		return false;
+	}
+	if (no->valor == valor) {
+		return true;
+	}
+	return buscar(no->esq, valor) || buscar(no->dir, valor);
 }
